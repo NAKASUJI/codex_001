@@ -102,7 +102,6 @@ def draw_board(stdscr, board, piece, next_piece, score):
     stdscr.addstr(0, preview_x, 'Next:')
     for bx, by in TETROMINOS[next_piece.type][0]:
         stdscr.addstr(1 + by, preview_x + bx * 2, '[]', curses.color_pair(TETROMINO_COLORS[next_piece.type]))
-
     stdscr.addstr(h + 1, 0, f'Score: {score}')
     stdscr.refresh()
 

@@ -19,5 +19,4 @@ The game opens in the terminal. Use:
 - `q` to quit
 
 The right side of the board shows which piece will fall next.
-
 Enjoy!
