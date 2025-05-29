@@ -87,7 +87,8 @@ def draw_board(stdscr, board, piece, score):
         for x in range(w):
             val = board[y][x]
             if val:
-                stdscr.addstr(y, x * 2, '  ', curses.color_pair(val))
+
+              stdscr.addstr(y, x * 2, '  ', curses.color_pair(val))
             else:
                 stdscr.addstr(y, x * 2, '  ', curses.color_pair(8))
 
@@ -95,7 +96,7 @@ def draw_board(stdscr, board, piece, score):
         if y >= 0:
             stdscr.addstr(y, x * 2, '  ', curses.color_pair(TETROMINO_COLORS[piece.type]))
 
-    stdscr.addstr(h + 1, 0, f'Score: {score}')
+   stdscr.addstr(h + 1, 0, f'Score: {score}')
     stdscr.refresh()
 
 

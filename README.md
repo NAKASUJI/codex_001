@@ -18,4 +18,7 @@ The game opens in the terminal. Use:
 - Down arrow to accelerate downward movement
 - `q` to quit
 
+
+The right side of the board shows which piece will fall next.
+
 Enjoy!
