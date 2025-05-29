@@ -80,7 +80,8 @@ class Piece:
         return False
 
 
-def draw_board(stdscr, board, piece, score):
+def draw_board(stdscr, board, piece, next_piece, score):
+    """Render the game board, current piece, next piece preview and score."""
     stdscr.clear()
     h, w = BOARD_HEIGHT, BOARD_WIDTH
     for y in range(h):
@@ -91,10 +92,16 @@ def draw_board(stdscr, board, piece, score):
             else:
                 stdscr.addstr(y, x * 2, ' .')
 
+    # draw current falling piece
     for x, y in piece.blocks:
         if y >= 0:
             stdscr.addstr(y, x * 2, '[]', curses.color_pair(TETROMINO_COLORS[piece.type]))
 
+    # preview next piece to the right of the board
+    preview_x = w * 2 + 4
+    stdscr.addstr(0, preview_x, 'Next:')
+    for bx, by in TETROMINOS[next_piece.type][0]:
+        stdscr.addstr(1 + by, preview_x + bx * 2, '[]', curses.color_pair(TETROMINO_COLORS[next_piece.type]))
     stdscr.addstr(h + 1, 0, f'Score: {score}')
     stdscr.refresh()
 
@@ -152,7 +159,7 @@ def main(stdscr):
                     break
             last_time = time.time()
 
-        draw_board(stdscr, board, current, score)
+        draw_board(stdscr, board, current, next_piece, score)
 
     stdscr.nodelay(False)
     stdscr.addstr(BOARD_HEIGHT // 2, BOARD_WIDTH, "Game Over! Press any key to exit.")
