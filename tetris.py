@@ -50,6 +50,8 @@ TETROMINO_COLORS = {
     'Z': 7,
 }
 
+EMPTY_COLOR = 8
+
 SPEED = 0.5
 
 class Piece:
@@ -80,23 +82,24 @@ class Piece:
         return False
 
 
-def draw_board(stdscr, board, piece, score):
+def draw_board(stdscr, board, piece, next_piece, score):
     stdscr.clear()
     h, w = BOARD_HEIGHT, BOARD_WIDTH
     for y in range(h):
         for x in range(w):
             val = board[y][x]
-            if val:
-
-              stdscr.addstr(y, x * 2, '  ', curses.color_pair(val))
-            else:
-                stdscr.addstr(y, x * 2, '  ', curses.color_pair(8))
+            color = curses.color_pair(val) if val else curses.color_pair(EMPTY_COLOR)
+            stdscr.addstr(y, x * 2, '  ', color)
 
     for x, y in piece.blocks:
         if y >= 0:
             stdscr.addstr(y, x * 2, '  ', curses.color_pair(TETROMINO_COLORS[piece.type]))
 
-   stdscr.addstr(h + 1, 0, f'Score: {score}')
+    stdscr.addstr(0, w * 2 + 3, 'Next:')
+    for x, y in next_piece.blocks:
+        stdscr.addstr(y + 2, w * 2 + 3 + x * 2, '  ', curses.color_pair(TETROMINO_COLORS[next_piece.type]))
+
+    stdscr.addstr(h + 1, 0, f'Score: {score}')
     stdscr.refresh()
 
 
@@ -111,10 +114,10 @@ def remove_complete_lines(board):
 def main(stdscr):
     curses.curs_set(0)
     stdscr.nodelay(True)
+    curses.use_default_colors()
     for i in range(1, 8):
         curses.init_pair(i, curses.COLOR_BLACK, i)
-    curses.init_pair(8, curses.COLOR_BLACK, curses.COLOR_WHITE)
-    stdscr.bkgd(' ', curses.color_pair(8))
+    curses.init_pair(EMPTY_COLOR, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
     board = [[0] * BOARD_WIDTH for _ in range(BOARD_HEIGHT)]
     current = Piece(random.choice(list(TETROMINOS.keys())))
@@ -155,7 +158,7 @@ def main(stdscr):
                     break
             last_time = time.time()
 
-        draw_board(stdscr, board, current, score)
+        draw_board(stdscr, board, current, next_piece, score)
 
     stdscr.nodelay(False)
     stdscr.addstr(BOARD_HEIGHT // 2, BOARD_WIDTH, "Game Over! Press any key to exit.")
