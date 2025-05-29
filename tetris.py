@@ -80,29 +80,23 @@ class Piece:
         return False
 
 
-def draw_board(stdscr, board, piece, next_piece, score):
-    """Render the game board, current piece, next piece preview and score."""
+def draw_board(stdscr, board, piece, score):
     stdscr.clear()
     h, w = BOARD_HEIGHT, BOARD_WIDTH
     for y in range(h):
         for x in range(w):
             val = board[y][x]
             if val:
-                stdscr.addstr(y, x * 2, '[]', curses.color_pair(val))
-            else:
-                stdscr.addstr(y, x * 2, ' .')
 
-    # draw current falling piece
+              stdscr.addstr(y, x * 2, '  ', curses.color_pair(val))
+            else:
+                stdscr.addstr(y, x * 2, '  ', curses.color_pair(8))
+
     for x, y in piece.blocks:
         if y >= 0:
-            stdscr.addstr(y, x * 2, '[]', curses.color_pair(TETROMINO_COLORS[piece.type]))
+            stdscr.addstr(y, x * 2, '  ', curses.color_pair(TETROMINO_COLORS[piece.type]))
 
-    # preview next piece to the right of the board
-    preview_x = w * 2 + 4
-    stdscr.addstr(0, preview_x, 'Next:')
-    for bx, by in TETROMINOS[next_piece.type][0]:
-        stdscr.addstr(1 + by, preview_x + bx * 2, '[]', curses.color_pair(TETROMINO_COLORS[next_piece.type]))
-    stdscr.addstr(h + 1, 0, f'Score: {score}')
+   stdscr.addstr(h + 1, 0, f'Score: {score}')
     stdscr.refresh()
 
 
@@ -118,7 +112,9 @@ def main(stdscr):
     curses.curs_set(0)
     stdscr.nodelay(True)
     for i in range(1, 8):
-        curses.init_pair(i, i, 0)
+        curses.init_pair(i, curses.COLOR_BLACK, i)
+    curses.init_pair(8, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    stdscr.bkgd(' ', curses.color_pair(8))
 
     board = [[0] * BOARD_WIDTH for _ in range(BOARD_HEIGHT)]
     current = Piece(random.choice(list(TETROMINOS.keys())))
@@ -159,7 +155,7 @@ def main(stdscr):
                     break
             last_time = time.time()
 
-        draw_board(stdscr, board, current, next_piece, score)
+        draw_board(stdscr, board, current, score)
 
     stdscr.nodelay(False)
     stdscr.addstr(BOARD_HEIGHT // 2, BOARD_WIDTH, "Game Over! Press any key to exit.")
