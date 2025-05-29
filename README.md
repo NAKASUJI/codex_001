@@ -21,4 +21,6 @@ The game opens in the terminal. Use:
 The board uses colored backgrounds for each block and shows the next piece on
 the right side of the playfield.
 
+The right side of the board shows which piece will fall next.
+
 Enjoy!
