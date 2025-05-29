@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "name": "codex_001",
+  "description": "ChatGPTで使うためのリポジトリ",
+  "instructions": "このリポジトリを使ってコードの説明や変更を依頼できます。"
+}
